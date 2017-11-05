@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import './card.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -11,27 +12,66 @@ class HomeState extends State<Home> {
 
   Widget _buildSearchField() {
     return new Container(
-      margin: const EdgeInsets.symmetric(horizontal: 8.0),
+      margin: const EdgeInsets.only(top: 100.0, bottom: 4.0),
+
       child: new TextField(
         controller: _searchController,
-        onSubmitted: _submit,
-        decoration: new InputDecoration.collapsed(hintText: "channel / show"),
+        style: new TextStyle(
+          color: Colors.white,
+          fontFamily: 'HelveticaNeue.ttf',
+          fontWeight: FontWeight.normal,
+          fontSize: 25.0
+        ),
+        decoration: new InputDecoration.collapsed(
+          hintText: "All Channels.",
+          hintStyle: new TextStyle(
+            color: Colors.white,
+            fontFamily: 'HelveticaNeue.ttf',
+            fontSize: 25.0,
+            fontWeight: FontWeight.w200
+          )
+        )
       ),
+    );
+  }
+
+  Widget _buildLabel(String msg) {
+    return new Container(
+      margin: const EdgeInsets.only(top: 30.0, bottom: 4.0),
+      child: new Opacity(
+        opacity: 0.50,
+        child: new Text(msg, style: new TextStyle(
+          color: Colors.white,
+          fontFamily: 'HelveticaNeue.ttf',
+          fontSize: 11.0,
+        )),
+      ),
+    );
+  }
+
+  Widget _buildScreen() {
+    return new Container(
+      margin: const EdgeInsets.all(16.0),
+      child: new Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _buildSearchField(),
+          _buildLabel("NOW"),
+          buildCard(alarm: "true"),
+          _buildLabel("LATER"),
+          buildCard(),
+          buildCard()
+        ]
+      )
     );
   }
 
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-      appBar: new AppBar(
-        title: new Text("channels"),
-      ),
-      body: _buildSearchField(),
+      body: _buildScreen(),
+      backgroundColor: new Color.fromRGBO(48, 136, 244, 1.0)
     );
-  }
-
-  void _submit(String text) {
-    _searchController.clear();
   }
 }
 

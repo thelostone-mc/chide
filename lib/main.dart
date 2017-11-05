@@ -10,7 +10,7 @@ class Chide extends StatelessWidget {
   Widget build(BuildContext context) {
     return new MaterialApp(
       title: "chide",
-      home: new Home(),
+      home: new Home()
     );
   }
 }
