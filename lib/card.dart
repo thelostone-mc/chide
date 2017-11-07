@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-Widget buildCard({String alarm}) {
-  BorderRadius _borderRadius = null;
-  EdgeInsetsGeometry _margin = null;
+Widget buildCard(Map input, {String alarm}) {
+  BorderRadius _borderRadius;
+  EdgeInsetsGeometry _margin;
 
   if(null == alarm) {
     _borderRadius = const BorderRadius.all(const Radius.circular(4.0));
@@ -34,7 +34,7 @@ Widget buildCard({String alarm}) {
       child: new Container(
         margin: const EdgeInsets.all(12.0),
         child: new Column(
-          children: _buildChannelCard()
+          children: _buildChannelCard(input)
         )
       )
     )
@@ -47,7 +47,7 @@ Widget buildCard({String alarm}) {
   return new Column(children: _widget);
 }
 
-List<Widget> _buildChannelCard() {
+List<Widget> _buildChannelCard(Map input) {
   return <Widget>[
     // Time
     new Container(
@@ -55,14 +55,14 @@ List<Widget> _buildChannelCard() {
       child: new Row(
         children: <Widget>[
           new Container(
-            child: _buildLabelTime("Today"),
+            child: _buildLabelTime(input["day"]),
           ),
           new Container(
             child: _buildLabelTime(".", weight: FontWeight.bold),
             margin: const EdgeInsets.symmetric(horizontal: 8.0),
           ),
           new Container(
-            child: _buildLabelTime("12:30pm - 04:00pm"),
+            child: _buildLabelTime(input["startTime"] +  "-" + input["endTime"]),
           )
         ]
       ),
@@ -72,7 +72,7 @@ List<Widget> _buildChannelCard() {
       children: <Widget>[
         new Container(
           margin: const EdgeInsets.only(bottom: 2.0),
-          child: new Text("Game Of Thrones", style: new TextStyle(
+          child: new Text(input["name"], style: new TextStyle(
             color: Colors.black,
             fontWeight: FontWeight.w600,
             fontSize: 14.0
@@ -83,8 +83,8 @@ List<Widget> _buildChannelCard() {
     // Channel & Duration
     new Column(
       children: <Widget>[
-        _buildLabelInfo(Icons.tv, "Channel: Star Movies HD"),
-        _buildLabelInfo(Icons.access_time, "Duration: 3.50 hours")
+        _buildLabelInfo(Icons.tv, "Channel: " + input["channel"]),
+        _buildLabelInfo(Icons.access_time, "Duration: " + input["duration"])
       ],
     )
   ];

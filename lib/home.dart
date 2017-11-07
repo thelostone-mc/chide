@@ -57,10 +57,10 @@ class HomeState extends State<Home> {
         children: [
           _buildSearchField(),
           _buildLabel("NOW"),
-          buildCard(alarm: "true"),
+          buildCard(_sampleInput, alarm: "true"),
           _buildLabel("LATER"),
-          buildCard(),
-          buildCard()
+          buildCard(_sampleInput),
+          buildCard(_sampleInput)
         ]
       )
     );
@@ -74,4 +74,14 @@ class HomeState extends State<Home> {
     );
   }
 }
+
+Map _sampleInput = {
+  "name": "Game Of Thrones",
+  "channel": "Star Movies HD",
+  "duration": "3.50",
+  "startTime": "12:30pm",
+  "endTime": "4:00pm",
+  "day": "Today"
+};
+
 
