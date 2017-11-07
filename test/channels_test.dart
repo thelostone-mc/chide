@@ -9,18 +9,20 @@ main() async {
 }
 
 testChannels() async {
-  DateTime _nextDay = new DateTime.now().add(new Duration(days: 2));
+  DateTime _nextDay = new DateTime.now().add(new Duration(days: 3));
 
-  var channelListings = await fetchListingsFor(115, days: 2);
+  var channelListings = await fetchListingsFor(115, days: 3);
   assert(null != channelListings);
+  //print(channelListings);
 
   var channelListing = await fetchListing(115);
   assert(null != channelListing);
+  //print(channelListing);
 
 
-  var nextDaysChannelListing = await fetchListing(114, _nextDay);
+  var nextDaysChannelListing = await fetchListing(114, date: _nextDay);
   assert(null != nextDaysChannelListing);
-  print(nextDaysChannelListing);
+  //print(nextDaysChannelListing);
 
   var channels = await fetchChannels();
   assert(null != channels);

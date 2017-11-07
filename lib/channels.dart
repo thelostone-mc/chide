@@ -5,6 +5,7 @@ import 'package:intl/intl.dart' show DateFormat;
 
 
 List channelsList;
+const RETRY = 30;
 
 /// offset : [integer] defaults to 1000
 ///
@@ -50,7 +51,10 @@ fetchChannels([int offset]) async {
 ///  episodes [name, startTime, duration]
 /// }
 ///
-fetchListing(int chId, [DateTime date]) async {
+fetchListing(int chId, { DateTime date, int retryCount }) async {
+
+  if(null == retryCount) retryCount = 0;
+
   var httpClient = createHttpClient();
   String _dateStr;
   String _channel = await _idToChannelMapper(chId.toString());
@@ -72,8 +76,8 @@ fetchListing(int chId, [DateTime date]) async {
   try{
     responseJSON = JSON.decode(response);
   } catch(e) {
-    //TODO: Retry on error
-    return {
+
+    if(retryCount == RETRY) return {
       "chId": chId,
       "channel": _channel,
       "date": date,
@@ -81,7 +85,10 @@ fetchListing(int chId, [DateTime date]) async {
       "episodes": "NA",
       "error": e
     };
+
+    return fetchListing(chId, date: date, retryCount: retryCount + 1);
   }
+
   List episodes = [];
 
   if(null != responseJSON["eventList"]) {
@@ -124,7 +131,7 @@ fetchListingsFor(int chId, {DateTime date, int days}) async {
   if(date == null) date = new DateTime.now();
 
   for(var day = 0; day < days; day++) {
-    _listings.add(await fetchListing(chId, date.add(new Duration(days: day))));
+    _listings.add(await fetchListing(chId, date: date.add(new Duration(days: day))));
   }
 
   return _listings;
