@@ -5,6 +5,7 @@ main() async {
   await testChannels();
   testTransformTime();
   testTransformDuration();
+  testCalculateEndTime();
   testGetDay();
 }
 
@@ -36,6 +37,12 @@ testTransformTime() {
 
 testTransformDuration() {
   assert(3.50 == transformDuration(230));
+}
+
+testCalculateEndTime() {
+  assert("00:30:00" == calculateEndTime("00:00:00", 30, new DateTime.now()));
+  assert("02:00:00" == calculateEndTime("00:00:00", 120, new DateTime.now()));
+  assert("01:00:00" == calculateEndTime("00:00:00", 60, new DateTime.now()));
 }
 
 testGetDay() {

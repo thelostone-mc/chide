@@ -96,10 +96,13 @@ fetchListing(int chId, { DateTime date, int retryCount }) async {
 
       double _duration = transformDuration(event["ed"]);
       String _startTime = transformTime(event["st"]);
+      String _endTime = transformTime(calculateEndTime(event["st"], event["ed"], date));
+      calculateEndTime(event["st"], event["ed"], date);
       Map _episode = {
         "name": event["et"],
         "channel": _channel,
         "startTime": _startTime,
+        "endTime" : _endTime,
         "duration": _duration.toStringAsFixed(2),
         "day": _day,
       };
@@ -193,12 +196,12 @@ double transformDuration(int minutes) {
 /// Transforms date to HH:MM[am/pm] format
 /// time: String
 ///
-/// returns Double
+/// returns string
 ///
 String transformTime(String time) {
   List _list = time.split(":");
   _list.removeLast();
-  
+
   String _minutes = _list.removeLast().toString();
   int _hours = int.parse(_list.removeLast());
   String _marker;
@@ -217,10 +220,37 @@ String transformTime(String time) {
   return _time;
 }
 
+
+/// Calculates end time of episode
 ///
+/// startTime: String
+/// duration: int
+/// date: DateTime
 ///
+/// returns string
 ///
-getDay(String date) {
+String calculateEndTime(String startTime, int duration, DateTime date) {
+  String _startTime = date.year.toString() + "-" +
+      date.month.toString().padLeft(2, '0') + "-" +
+      date.day.toString().padLeft(2, '0') + " " + startTime;
+
+  DateTime _time = DateTime.parse(_startTime)
+      .add(new Duration(minutes: duration));
+
+  String _endTime =  _time.hour.toString().padLeft(2, '0') + ":" +
+      _time.minute.toString().padLeft(2, '0') + ":" +
+      _time.second.toString().padLeft(2, '0');
+
+  return _endTime;
+}
+
+/// Returns day of the week
+///
+/// date: String
+///
+/// returns String
+///
+String getDay(String date) {
   DateFormat formatter = new DateFormat('yyyy-MM-dd');
   DateTime now = DateTime.parse(formatter.format(new DateTime.now()));
 
