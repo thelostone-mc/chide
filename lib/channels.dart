@@ -3,7 +3,6 @@ import 'package:flutter/services.dart';
 import 'package:html/parser.dart' show parse;
 import 'package:intl/intl.dart' show DateFormat;
 
-
 List channelsList;
 const RETRY = 30;
 
