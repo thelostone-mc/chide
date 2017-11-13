@@ -1,15 +1,26 @@
 import 'package:flutter/material.dart';
+import 'ListingData.dart';
 
-Widget buildCard(Map input, {String alarm}) {
+class ListingCard extends StatelessWidget {
+  final Listing _data;
+  ListingCard(this._data);
+
+  @override
+  Widget build(BuildContext context) {
+    return buildCard(_data);
+  }
+}
+
+Widget buildCard(Listing input) {
   BorderRadius _borderRadius;
   EdgeInsetsGeometry _margin;
 
-  if(null == alarm) {
-    _borderRadius = const BorderRadius.all(const Radius.circular(4.0));
-    _margin = const EdgeInsets.symmetric(vertical: 5.0);
-  } else {
+  if(true == input.alarm) {
     _borderRadius = const BorderRadius.only(topLeft: const Radius.circular(4.0), topRight: const Radius.circular(4.0));
     _margin =  const EdgeInsets.only(top: 5.0);
+  } else {
+    _borderRadius = const BorderRadius.all(const Radius.circular(4.0));
+    _margin = const EdgeInsets.symmetric(vertical: 5.0);
   }
 
   List<Widget> _widget = <Widget>[
@@ -40,14 +51,14 @@ Widget buildCard(Map input, {String alarm}) {
     )
   ];
 
-  if(null != alarm) {
+  if(true == input.alarm) {
     _widget.add(_buildAlarmBox());
   }
 
   return new Column(children: _widget);
 }
 
-List<Widget> _buildChannelCard(Map input) {
+List<Widget> _buildChannelCard(Listing input) {
   return <Widget>[
     // Time
     new Container(
@@ -55,14 +66,14 @@ List<Widget> _buildChannelCard(Map input) {
       child: new Row(
         children: <Widget>[
           new Container(
-            child: _buildLabelTime(input["day"]),
+            child: _buildLabelTime(input.day),
           ),
           new Container(
             child: _buildLabelTime(".", weight: FontWeight.bold),
             margin: const EdgeInsets.symmetric(horizontal: 8.0),
           ),
           new Container(
-            child: _buildLabelTime(input["startTime"] +  "-" + input["endTime"]),
+            child: _buildLabelTime(input.startTime +  "-" + input.endTime),
           )
         ]
       ),
@@ -72,7 +83,7 @@ List<Widget> _buildChannelCard(Map input) {
       children: <Widget>[
         new Container(
           margin: const EdgeInsets.only(bottom: 2.0),
-          child: new Text(input["name"], style: new TextStyle(
+          child: new Text(input.name, style: new TextStyle(
             color: Colors.black,
             fontWeight: FontWeight.w600,
             fontSize: 14.0
@@ -83,8 +94,8 @@ List<Widget> _buildChannelCard(Map input) {
     // Channel & Duration
     new Column(
       children: <Widget>[
-        _buildLabelInfo(Icons.tv, "Channel: " + input["channel"]),
-        _buildLabelInfo(Icons.access_time, "Duration: " + input["duration"])
+        _buildLabelInfo(Icons.tv, "Channel: " + input.channel),
+        _buildLabelInfo(Icons.access_time, "Duration: " + input.duration)
       ],
     )
   ];

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import './card.dart';
-//import './channels.dart';
+import 'ChannelListing.dart';
+import 'ListingData.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -28,7 +28,7 @@ class HomeState extends State<Home> {
                 fontSize: 25.0
               ),
               decoration: new InputDecoration.collapsed(
-                hintText: "All Channels.",
+                hintText: "Search All Channels.",
                 hintStyle: new TextStyle(
                   color: Colors.white,
                   fontFamily: 'HelveticaNeue.ttf',
@@ -72,10 +72,10 @@ class HomeState extends State<Home> {
         children: [
           _buildSearchField(),
           _buildLabel("NOW"),
-          buildCard(_sampleInput[0], alarm: "true"),
+          new ChannelListing(anotherListing),
           _buildLabel("LATER"),
-          buildCard(_sampleInput[0]),
-          buildCard(_sampleInput[0])
+          new ChannelListing(listingData),
+
         ]
       )
     );
@@ -106,22 +106,3 @@ class HomeState extends State<Home> {
 //
 //  return names;
 //}
-
-List _sampleInput = [
-  {
-    "name": "Game Of Thrones",
-    "channel": "Star Movies HD",
-    "duration": "3.50",
-    "startTime": "12:30pm",
-    "endTime": "4:00pm",
-    "day": "Today"
-  },
-  {
-    "name": "Rick And Morty",
-    "channel": "Star Movies HD",
-    "duration": ".30",
-    "startTime": "3:30pm",
-    "endTime": "4:00pm",
-    "day": "Today"
-  }
-];
