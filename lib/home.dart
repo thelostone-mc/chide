@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'ChannelListing.dart';
-import 'ListingData.dart';
+import 'package:chide/data/Listing.dart';
 
 class Home extends StatefulWidget {
   @override

@@ -1,16 +1,26 @@
+import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/services.dart';
 import 'package:html/parser.dart' show parse;
 import 'package:intl/intl.dart' show DateFormat;
+import './Listing.dart';
 
 List channelsList;
 const RETRY = 30;
+
+
+class ChannelListingRepository implements ListingRepository{
+  Future<List<Listing>> fetch(){
+    return fetchListing(115);
+  }
+}
+
 
 /// offset : [integer] defaults to 1000
 ///
 /// returns channel = {chId, name}
 ///
-fetchChannels([int offset]) async {
+Future fetchChannels([int offset]) async {
   var httpClient = createHttpClient();
 
   if(offset == null || offset == 0) offset = 10000;
@@ -40,17 +50,13 @@ fetchChannels([int offset]) async {
   return _channels;
 }
 
-
-/// chId : channel identifier
-/// date : {optional} defaults to current date
+/// chId        : channel identifier
+/// date        : {DateTime} defaults to current date
+/// retry       : {int} defaults to 30
 ///
-/// returns listing {
-///  chId,
-///  date,
-///  episodes [name, startTime, duration]
-/// }
+/// returns episodes : List<Listings>
 ///
-fetchListing(int chId, { DateTime date, int retryCount }) async {
+Future<List<Listing>> fetchListing(int chId, { DateTime date, int retryCount}) async {
 
   if(null == retryCount) retryCount = 0;
 
@@ -72,23 +78,23 @@ fetchListing(int chId, { DateTime date, int retryCount }) async {
 
   var response = await httpClient.read(url, headers: headers);
   var responseJSON;
+  List episodes = [];
+
   try{
     responseJSON = JSON.decode(response);
-  } catch(e) {
-
-    if(retryCount == RETRY) return {
-      "chId": chId,
-      "channel": _channel,
-      "date": date,
-      "day": _day,
-      "episodes": "NA",
-      "error": e
-    };
-
+  } catch(error) {
+    if (retryCount == RETRY) {
+      episodes.add(new Listing(
+          chId: chId,
+          channel: _channel,
+          date: date,
+          day: _day,
+          error: error
+      ));
+      return episodes;
+    }
     return fetchListing(chId, date: date, retryCount: retryCount + 1);
   }
-
-  List episodes = [];
 
   if(null != responseJSON["eventList"]) {
     for(var event in responseJSON["eventList"]) {
@@ -97,27 +103,23 @@ fetchListing(int chId, { DateTime date, int retryCount }) async {
       String _startTime = transformTime(event["st"]);
       String _endTime = transformTime(calculateEndTime(event["st"], event["ed"], date));
       calculateEndTime(event["st"], event["ed"], date);
-      Map _episode = {
-        "name": event["et"],
-        "channel": _channel,
-        "startTime": _startTime,
-        "endTime" : _endTime,
-        "duration": _duration.toStringAsFixed(2),
-        "day": _day,
-      };
+
+      Listing _episode = new Listing(
+        chId: chId,
+        name: event["et"],
+        channel: _channel,
+        duration: _duration.toStringAsFixed(2),
+        startTime: _startTime,
+        endTime: _endTime,
+        day: _day,
+        date: date
+      );
+
       episodes.add(_episode);
     }
   }
 
-  Map _listing = {
-    "chId": chId,
-    "channel": _channel,
-    "date": date,
-    "day": _day,
-    "episodes": episodes
-  };
-
-  return _listing;
+  return episodes;
 }
 
 
@@ -125,15 +127,18 @@ fetchListing(int chId, { DateTime date, int retryCount }) async {
 /// date : {optional} defaults to current date
 /// days : {optional} number of days from specified date
 ///
-/// returns [listing]
+/// returns [Listing]
 ///
 fetchListingsFor(int chId, {DateTime date, int days}) async {
-  List<String> _listings = [];
+  List<List<Listing>> _listings = [];
 
   if(date == null) date = new DateTime.now();
 
   for(var day = 0; day < days; day++) {
-    _listings.add(await fetchListing(chId, date: date.add(new Duration(days: day))));
+    _listings.add(await fetchListing(
+      chId,
+      date: date.add(new Duration(days: day)))
+    );
   }
 
   return _listings;

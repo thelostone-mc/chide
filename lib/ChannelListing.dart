@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'ListingData.dart';
+import 'package:chide/data/Listing.dart';
 import 'ListingCard.dart';
 
 class ChannelListing extends StatelessWidget {

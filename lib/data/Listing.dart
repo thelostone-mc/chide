@@ -1,24 +1,50 @@
+import 'dart:async';
+
+abstract class ListingRepository {
+  Future<List<Listing>> fetch();
+}
+
 class Listing {
+  int chId;
+  bool alarm;
   String name;
   String channel;
   String duration;
   String startTime;
   String endTime;
   String day;
-  bool alarm;
+  String error;
+  DateTime date;
 
   Listing({
+    this.chId,
     this.name,
     this.channel,
     this.duration,
     this.startTime,
     this.endTime,
     this.day,
-    this.alarm
+    this.alarm,
+    this.date,
+    this.error
   });
 
 }
 
+/// exception: fetch() fails
+class FetchDataException implements Exception {
+  String _message;
+
+  FetchDataException(this._message);
+
+  @override
+  String toString() {
+    return "fetchData: " + _message;
+  }
+}
+
+
+/// Sample Data
 var listingData = [
   new Listing(
     name: "Game Of Thrones",

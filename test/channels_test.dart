@@ -1,4 +1,4 @@
-import '../lib/channels.dart';
+import 'package:chide/data/Channel.dart';
 import 'package:intl/intl.dart' show DateFormat;
 
 main() async {
@@ -18,8 +18,14 @@ testChannels() async {
 
   var channelListing = await fetchListing(115);
   assert(null != channelListing);
+  assert(null != channelListing.last.chId);
+  assert(null != channelListing.last.name);
+  assert(null != channelListing.last.channel);
+  assert(null != channelListing.last.duration);
+  assert(null != channelListing.last.startTime);
+  assert(null != channelListing.last.endTime);
+  assert(null != channelListing.last.day);
   //print(channelListing);
-
 
   var nextDaysChannelListing = await fetchListing(114, date: _nextDay);
   assert(null != nextDaysChannelListing);

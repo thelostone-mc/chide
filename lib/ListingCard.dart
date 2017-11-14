@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'ListingData.dart';
+import 'package:chide/data/Listing.dart';
 
 class ListingCard extends StatelessWidget {
   final Listing _data;
