@@ -83,11 +83,16 @@ List<Widget> _buildChannelCard(Listing input) {
       children: <Widget>[
         new Container(
           margin: const EdgeInsets.only(bottom: 2.0),
-          child: new Text(input.name, style: new TextStyle(
-            color: Colors.black,
-            fontWeight: FontWeight.w600,
-            fontSize: 14.0
-          )),
+          child: new Text(
+            input.name,
+            overflow: TextOverflow.clip,
+            maxLines: 2,
+            style: new TextStyle(
+              color: Colors.black,
+              fontWeight: FontWeight.w600,
+              fontSize: 14.0
+            )
+          ),
         ),
       ],
     ),

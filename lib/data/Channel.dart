@@ -3,18 +3,16 @@ import 'dart:convert';
 import 'package:flutter/services.dart';
 import 'package:html/parser.dart' show parse;
 import 'package:intl/intl.dart' show DateFormat;
-import './Listing.dart';
+import 'package:chide/data/Listing.dart';
 
 List channelsList;
 const RETRY = 30;
 
-
-class ChannelListingRepository implements ListingRepository{
-  Future<List<Listing>> fetch(){
+class ChannelListingRepository implements ListingRepository {
+  Future<List<Listing>> fetch() {
     return fetchListing(115);
   }
 }
-
 
 /// offset : [integer] defaults to 1000
 ///
@@ -89,7 +87,7 @@ Future<List<Listing>> fetchListing(int chId, { DateTime date, int retryCount}) a
           channel: _channel,
           date: date,
           day: _day,
-          error: error
+          error: error.toString()
       ));
       return episodes;
     }

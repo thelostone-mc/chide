@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'ChannelListing.dart';
+import 'package:chide/ChannelListing.dart';
 import 'package:chide/data/Listing.dart';
 
 class Home extends StatefulWidget {
@@ -67,14 +67,13 @@ class HomeState extends State<Home> {
   Widget _buildScreen() {
     return new Container(
       margin: const EdgeInsets.all(16.0),
-      child: new Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: new ListView(
         children: [
           _buildSearchField(),
           _buildLabel("NOW"),
-          new ChannelListing(anotherListing),
+          new ChannelListingDummy(anotherListing),
           _buildLabel("LATER"),
-          new ChannelListing(listingData),
+          new ChannelListing(),
 
         ]
       )
