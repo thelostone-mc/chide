@@ -4,7 +4,7 @@ A flutter based app to show channel listing for Indian TV channels
 
 ## Feature(s)
 
-- view channel listing for a week
+- view channel listing for a week (with photo , ratings, cast, online availability)
 - search for channels / programs
 - enable reminders for programs
 - filter listing based on cast / director
